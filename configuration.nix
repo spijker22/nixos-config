@@ -90,7 +90,7 @@ services.tailscale.enable = true;
   };
 
   # Install firefox.
-  programs.firefox.enable = true;
+  programs.firefox.enable = false;
 
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
@@ -104,6 +104,7 @@ services.tailscale.enable = true;
 
 environment.systemPackages = with pkgs; [
   brave
+  librewolf
   transmission_4
   htop
   fastfetch
@@ -116,9 +117,12 @@ environment.systemPackages = with pkgs; [
   signal-desktop
   
 ];
+#cloudflare dns 
+networking.nameservers = [ "1.1.1.1" "1.0.0.1" ];
+networking.networkmanager.dns = "none";   
 #unbound 
 services.unbound = {
-  enable = true;
+  enable = false;
   settings.server = {
     interface = [ "192.168.2.2" "127.0.0.1" ];
     access-control = [ "192.168.2.0/24 allow" ];
