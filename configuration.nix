@@ -108,6 +108,7 @@ environment.systemPackages = with pkgs; [
   transmission_4
   htop
   fastfetch
+  gimp
   cmatrix
   android-tools
   supertuxkart
@@ -116,7 +117,8 @@ environment.systemPackages = with pkgs; [
   git
   libreoffice
   signal-desktop
-  
+  aisleriot
+  fish
 ];
 #alias
 programs.bash.shellInit = ''
