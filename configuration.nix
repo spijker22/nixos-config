@@ -117,6 +117,18 @@ environment.systemPackages = with pkgs; [
   signal-desktop
   
 ];
+#alias
+programs.bash.shellInit = ''
+  deploy() {
+    local msg=update
+    [ -n "$1" ] && msg="$1"
+    sudo nixos-rebuild switch &&
+    cd ~/.config/nixos &&
+    git add . &&
+    git commit -m "$msg" &&
+    git push
+  }
+'';   
 #cloudflare dns 
 #networking.nameservers = [ "1.1.1.1" "1.0.0.1" ];
 #networking.networkmanager.dns = "none";   
