@@ -22,6 +22,9 @@ zramSwap = {
 };
   # Use latest kernel.
   boot.kernelPackages = pkgs.linuxPackages_latest;
+  #older than 30 day generations
+nix.gc.automatic = true;
+nix.gc.options = "--delete-older-than 30d";   
 
   networking.hostName = "nixos"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
