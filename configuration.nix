@@ -118,11 +118,11 @@ environment.systemPackages = with pkgs; [
   
 ];
 #cloudflare dns 
-networking.nameservers = [ "1.1.1.1" "1.0.0.1" ];
-networking.networkmanager.dns = "none";   
+#networking.nameservers = [ "1.1.1.1" "1.0.0.1" ];
+#networking.networkmanager.dns = "none";   
 #unbound 
 services.unbound = {
-  enable = false;
+  enable = true;
   settings.server = {
     interface = [ "192.168.2.2" "127.0.0.1" ];
     access-control = [ "192.168.2.0/24 allow" ];
@@ -143,7 +143,38 @@ services.unbound = {
     ];
   }];
 };   
+#flatpak
+#flatpak
 services.flatpak.enable = true;
+
+systemd.services.flatpak-management = {
+  description = "Manage Flatpak installations";
+  serviceConfig = {
+    Type = "oneshot";
+    RemainAfterExit = "yes";
+    ExecStart = pkgs.writeScript "flatpak-management" ''
+      #!${pkgs.runtimeShell} -e
+      ${pkgs.flatpak}/bin/flatpak remote-add --if-not-exists flathub \
+        https://flathub.org/repo/flathub.flatpakrepo
+
+      for app in com.google.Chrome org.mozilla.firefox; do
+        ${pkgs.flatpak}/bin/flatpak install -y --noninteractive flathub "$app"
+      done
+
+      ${pkgs.flatpak}/bin/flatpak update -y --noninteractive
+    '';
+  };
+  wantedBy = [ "multi-user.target" ];
+};
+
+systemd.timers.flatpak-management = {
+  description = "Daily Flatpak management";
+  timerConfig = {
+    OnCalendar = "daily";
+    Persistent = true;
+  };
+  wantedBy = [ "timers.target" ];
+};   
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
