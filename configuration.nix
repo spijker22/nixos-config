@@ -114,6 +114,7 @@ environment.systemPackages = with pkgs; [
   tor-browser
   vlc
   git
+  libreoffice
   signal-desktop
   
 ];
