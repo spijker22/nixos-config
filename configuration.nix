@@ -108,7 +108,6 @@ services.tailscale.enable = true;
 #firewall
 networking.firewall.enable = true;
 
-
 #packages extra
 environment.systemPackages = with pkgs; [
   brave
