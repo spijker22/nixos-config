@@ -105,6 +105,11 @@ services.tailscale.enable = true;
   #   wget
   # ];
 
+#firewall
+networking.firewall.enable = true;
+
+
+#packages extra
 environment.systemPackages = with pkgs; [
   brave
  #librewolf
