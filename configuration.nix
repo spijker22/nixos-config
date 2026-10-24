@@ -107,7 +107,7 @@ services.tailscale.enable = true;
 
 environment.systemPackages = with pkgs; [
   brave
-  librewolf
+ #librewolf
   transmission_4
   htop
   fastfetch
