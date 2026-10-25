@@ -112,6 +112,7 @@ networking.firewall.enable = true;
 environment.systemPackages = with pkgs; [
   brave
  #librewolf
+  brasero
   samba
   transmission_4
   htop
