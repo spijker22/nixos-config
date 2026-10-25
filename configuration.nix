@@ -153,6 +153,7 @@ environment.systemPackages = with pkgs; [
   samba
   transmission_4
   htop
+  nautilus
   fastfetch
   gimp
   alacritty
