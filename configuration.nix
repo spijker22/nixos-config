@@ -150,6 +150,7 @@ environment.systemPackages = with pkgs; [
   gnomeExtensions.dash-to-dock
   brave
  #librewolf
+  exfatprogs
   samba
   transmission_4
   htop
@@ -157,6 +158,7 @@ environment.systemPackages = with pkgs; [
   fastfetch
   gimp
   alacritty
+  cryptsetup
   gnome-tweaks
   cmatrix
   android-tools
@@ -169,7 +171,15 @@ environment.systemPackages = with pkgs; [
   aisleriot
   fish
 ];
-#alias
+#alias format f32 usb 
+environment.shellAliases = {
+  format-vfat  = "sudo mkfs.vfat -I -F 32 -n \"fat32\" /dev/sdb";
+  format-exfat = "sudo mkfs.exfat -L \"exfat\" /dev/sdb";
+  format-ext4  = "sudo cryptsetup luksFormat /dev/sdb && sudo cryptsetup open /dev/sdb cryptusb && sudo mkfs.ext4 -F -L \"encrypted\" /dev/mapper/cryptusb && sudo mkdir -p /mnt/usb && sudo mount /dev/mapper/cryptusb /mnt/usb && sudo chown -R luuk:users /mnt/usb && sudo umount /mnt/usb && sudo cryptsetup close cryptusb && echo 'Done! You can now unplug the USB or open it via your file manager.'";
+
+};
+
+#alias git
 programs.bash.shellInit = ''
   deploy() {
     local msg=update
