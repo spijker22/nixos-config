@@ -57,6 +57,20 @@ services.tailscale.enable = true;
   # Enable the GNOME Desktop Environment.
   services.displayManager.gdm.enable = true;
   services.desktopManager.gnome.enable = true;
+#dconf
+  programs.dconf.profiles.user.databases = [
+    {
+      lockAll = true; # prevents overriding
+      settings = {
+        "org/gnome/desktop/interface" = {
+          accent-color = "blue";
+        };
+        "org/gnome/desktop/input-sources" = {
+          xkb-options = [ "ctrl:nocaps" ];
+        };
+      };
+    }
+  ];
 
   # Configure keymap in X11
   services.xserver.xkb = {
