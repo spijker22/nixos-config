@@ -13,6 +13,20 @@
   boot.loader.grub.enable = true;
   boot.loader.grub.device = "/dev/sda";
   boot.loader.grub.useOSProber = true;
+#ubuntu font
+fonts = {
+  packages = with pkgs; [
+    ubuntu-classic  # Changed from ubuntu_font_family
+  ];
+  fontconfig = {
+    defaultFonts = {
+      sansSerif = [ "Ubuntu" ];
+      serif = [ "Liberation Serif" ];
+      monospace = [ "Ubuntu Mono" ];
+    };
+  };
+};
+
 #zram
 zramSwap = {
   enable = true;
@@ -121,7 +135,6 @@ services.tailscale.enable = true;
 
   # List packages installed in system profile.
   # You can use https://search.nixos.org/ to find more packages (and options).
-  # environment.systemPackages = with pkgs; [
   #   vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
   #   wget
   # ];
@@ -131,6 +144,10 @@ networking.firewall.enable = true;
 
 #packages extra
 environment.systemPackages = with pkgs; [
+  #gnomeExtensions.blur-my-shell
+  #gnomeExtensions.just-perfection
+  #gnomeExtensions.arc-menu
+  gnomeExtensions.dash-to-dock
   brave
  #librewolf
   samba
