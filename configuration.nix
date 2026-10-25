@@ -13,7 +13,7 @@
   boot.loader.grub.enable = true;
   boot.loader.grub.device = "/dev/sda";
   boot.loader.grub.useOSProber = true;
-
+#zram
 zramSwap = {
   enable = true;
   algorithm = "zstd";    # good compression + fast (default)
@@ -112,7 +112,6 @@ networking.firewall.enable = true;
 environment.systemPackages = with pkgs; [
   brave
  #librewolf
-  brasero
   samba
   transmission_4
   htop
@@ -167,7 +166,6 @@ services.unbound = {
     ];
   }];
 };   
-#flatpak
 #flatpak
 services.flatpak.enable = true;
 
