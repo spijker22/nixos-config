@@ -57,6 +57,13 @@ services.tailscale.enable = true;
   # Enable the GNOME Desktop Environment.
   services.displayManager.gdm.enable = true;
   services.desktopManager.gnome.enable = true;
+
+  # To disable installing GNOME's suite of applications
+  # and only be left with GNOME shell.
+  services.gnome.core-apps.enable = false;
+  services.gnome.core-developer-tools.enable = false;
+  services.gnome.games.enable = false;
+  environment.gnome.excludePackages = with pkgs; [ gnome-tour gnome-user-docs ];
 #dconf
   programs.dconf.profiles.user.databases = [
     {
@@ -79,7 +86,7 @@ services.tailscale.enable = true;
   };
 
   # Enable CUPS to print documents.
-  services.printing.enable = true;
+  services.printing.enable = false;
 
   # Enable sound with pipewire.
   services.pulseaudio.enable = false;
@@ -131,6 +138,8 @@ environment.systemPackages = with pkgs; [
   htop
   fastfetch
   gimp
+  alacritty
+  gnome-tweaks
   cmatrix
   android-tools
   supertuxkart
