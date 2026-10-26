@@ -9,14 +9,20 @@
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
     ];
+# Nvidia latest
+  #hardware.graphics.enable = true;
+  #services.xserver.videoDrivers = [ "nvidia" ];
+  #hardware.nvidia.open = false;  # true for opensource
+# Nvidia legacy
+#hardware.nvidia.package = config.boot.kernelPackages.nvidiaPackages.legacy_580;
   # Use the GRUB 2 boot loader.
   boot.loader.grub.enable = true;
   boot.loader.grub.device = "/dev/sda";
   boot.loader.grub.useOSProber = true;
-#systemd boot 
+#  Systemd boot 
  #boot.loader.systemd-boot.enable = true;
  #boot.loader.systemd-boot.editor = false;
-#ubuntu font
+#  Ubuntu font
 fonts = {
   packages = with pkgs; [
     ubuntu-classic  # Changed from ubuntu_font_family
