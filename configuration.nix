@@ -13,6 +13,9 @@
   boot.loader.grub.enable = true;
   boot.loader.grub.device = "/dev/sda";
   boot.loader.grub.useOSProber = true;
+#systemd boot 
+ #boot.loader.systemd-boot.enable = true;
+ #boot.loader.systemd-boot.editor = false;
 #ubuntu font
 fonts = {
   packages = with pkgs; [
