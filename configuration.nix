@@ -88,20 +88,23 @@ services.tailscale.enable = true;
   services.gnome.games.enable = false;
   environment.gnome.excludePackages = with pkgs; [ gnome-tour gnome-user-docs ];
 #dconf
-  programs.dconf.profiles.user.databases = [
-    {
-      lockAll = true; # prevents overriding
-      settings = {
-        "org/gnome/desktop/interface" = {
-          accent-color = "blue";
-        };
-        "org/gnome/desktop/input-sources" = {
-          xkb-options = [ "ctrl:nocaps" ];
-        };
+programs.dconf.profiles.user.databases = [
+  {
+    lockAll = true;
+    settings = {
+      "org/gnome/desktop/interface" = {
+        accent-color = "orange";       # was "blue"
+        gtk-theme = "Yaru";
+        icon-theme = "Papirus-Dark";
+        cursor-theme = "Yaru";
+        color-scheme = "prefer-dark";
       };
-    }
-  ];
-
+      "org/gnome/desktop/input-sources" = {
+        xkb-options = [ "ctrl:nocaps" ];
+      };
+    };
+  }
+];   
   # Configure keymap in X11
   services.xserver.xkb = {
     layout = "us";
@@ -182,6 +185,8 @@ environment.systemPackages = with pkgs; [
   aisleriot
   fish
   lbreakout2
+  yaru-theme
+  papirus-icon-theme
 ];
 #alias format f32 usb 
 environment.shellAliases = {
