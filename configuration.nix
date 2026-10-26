@@ -160,6 +160,7 @@ environment.systemPackages = with pkgs; [
   alacritty
   cryptsetup
   gnome-tweaks
+  xfburn
   cmatrix
   android-tools
   supertuxkart
@@ -176,7 +177,8 @@ environment.shellAliases = {
   format-vfat  = "sudo mkfs.vfat -I -F 32 -n \"fat32\" /dev/sdb";
   format-exfat = "sudo mkfs.exfat -L \"exfat\" /dev/sdb";
   format-ext4  = "sudo cryptsetup luksFormat /dev/sdb && sudo cryptsetup open /dev/sdb cryptusb && sudo mkfs.ext4 -F -L \"encrypted\" /dev/mapper/cryptusb && sudo mkdir -p /mnt/usb && sudo mount /dev/mapper/cryptusb /mnt/usb && sudo chown -R luuk:users /mnt/usb && sudo umount /mnt/usb && sudo cryptsetup close cryptusb && echo 'Done! You can now unplug the USB or open it via your file manager.'";
-
+ # USB Flasher functie met vrije ISO-invoer
+  flash-usb    = "_flash(){ sudo dd if=\"$1\" of=/dev/sdb bs=4M status=progress conv=fsync; }; _flash";
 };
 
 #alias git
