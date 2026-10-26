@@ -171,6 +171,7 @@ environment.systemPackages = with pkgs; [
   gnome-tweaks
   xfburn
   cmatrix
+  appimage-run
   android-tools
   supertuxkart
   tor-browser
@@ -180,6 +181,7 @@ environment.systemPackages = with pkgs; [
   signal-desktop
   aisleriot
   fish
+  lbreakout2
 ];
 #alias format f32 usb 
 environment.shellAliases = {
