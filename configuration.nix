@@ -162,6 +162,9 @@ environment.systemPackages = with pkgs; [
   gnomeExtensions.dash-to-dock
   brave
  #librewolf
+  abcde
+  flac
+  cdparanoia
   exfatprogs
   samba
   transmission_4
