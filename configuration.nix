@@ -9,6 +9,27 @@
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
     ];
+#iphone ios
+services.usbmuxd = {
+  enable = true;
+  package = pkgs.usbmuxd2;
+};
+#pair iphone 
+  environment.interactiveShellInit = ''
+    # Snel je iPhone koppelen (Foto's)
+    iphone-on() {
+        idevicepair pair
+        mkdir -p ~/iPhone
+        ifuse ~/iPhone
+        echo "iPhone succesvol gekoppeld op ~/iPhone ✨"
+    }
+
+    # Snel je iPhone weer ontkoppelen
+    iphone-off() {
+        fusermount -u ~/iPhone
+        echo "iPhone veilig ontkoppeld! 👋"
+    }
+  '';
 # Nvidia latest
   #hardware.graphics.enable = true;
   #services.xserver.videoDrivers = [ "nvidia" ];
@@ -180,6 +201,8 @@ environment.systemPackages = with pkgs; [
   cryptsetup
   gnome-tweaks
   xfburn
+  libimobiledevice
+  ifuse # Allows mounting the iOS file system via FUSE
   cmatrix
   libdvdcss
   appimage-run
