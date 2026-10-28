@@ -15,6 +15,10 @@
   #hardware.nvidia.open = false;  # true for opensource
 # Nvidia legacy
 #hardware.nvidia.package = config.boot.kernelPackages.nvidiaPackages.legacy_580;
+# Zorgt ervoor dat HandBrake libdvdcss direct kan vinden in de Nix-store
+environment.sessionVariables = {
+  LD_LIBRARY_PATH = "${pkgs.libdvdcss}/lib";
+};
   # Use the GRUB 2 boot loader.
   boot.loader.grub.enable = true;
   boot.loader.grub.device = "/dev/sda";
@@ -177,6 +181,7 @@ environment.systemPackages = with pkgs; [
   gnome-tweaks
   xfburn
   cmatrix
+  libdvdcss
   appimage-run
   android-tools
   supertuxkart
