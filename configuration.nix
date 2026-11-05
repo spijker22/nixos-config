@@ -84,6 +84,8 @@ nix.gc.options = "--delete-older-than 30d";
   # Enable networking
   networking.networkmanager.enable = true;
 services.tailscale.enable = true;
+services.tailscale.useRoutingFeatures = "both";
+
   # Set your time zone.
   time.timeZone = "Europe/Amsterdam";
 
@@ -177,16 +179,21 @@ programs.dconf.profiles.user.databases = [
   # ];
 
 #firewall
-networking.firewall.enable = true;
-
+networking.firewall = {
+  enable = true;
+  checkReversePath = "loose";  # ← dit is de cruciale regel voor exit nodes
+  trustedInterfaces = [ "tailscale0" ];
+  allowedUDPPorts = [ config.services.tailscale.port ];
+};   
 #packages extra
 environment.systemPackages = with pkgs; [
   #gnomeExtensions.blur-my-shell
   #gnomeExtensions.just-perfection
   #gnomeExtensions.arc-menu
   gnomeExtensions.dash-to-dock
-  brave
- #librewolf
+  #brave-origin
+  #librewolf
+  (brave-origin.override { commandLineArgs = [ "--incognito" ]; })   
   abcde
   flac
   cdparanoia
@@ -204,6 +211,7 @@ environment.systemPackages = with pkgs; [
   libimobiledevice
   ifuse # Allows mounting the iOS file system via FUSE
   cmatrix
+  handbrake
   libdvdcss
   appimage-run
   android-tools
@@ -224,7 +232,7 @@ environment.shellAliases = {
 # Fixes the ghost device file issue by removing the fake file
   fix-sdb = "sudo rm -f /dev/sdb";
   format-vfat  = "sudo mkfs.fat -I -F 32 -n \"MYUSB\" /dev/sdb";
-  format-exfat = "sudo mkfs.exfat -L \"EXFAT\" /dev/sdb";
+  format-exfat = "sudo mkfs.exfat -F -L  \"EXFAT\" /dev/sdb";
   format-ext4  = "sudo cryptsetup luksFormat /dev/sdb && sudo cryptsetup open /dev/sdb cryptusb && sudo mkfs.ext4 -F -L \"encrypted\" /dev/mapper/cryptusb && sudo mkdir -p /mnt/usb && sudo mount /dev/mapper/cryptusb /mnt/usb && sudo chown -R luuk:users /mnt/usb && sudo umount /mnt/usb && sudo cryptsetup close cryptusb && echo 'Done! You can now unplug the USB or open it via your file manager.'";
  # USB Flasher functie met vrije ISO-invoer
   flash-usb    = "_flash(){ sudo dd if=\"$1\" of=/dev/sdb bs=4M status=progress conv=fsync; }; _flash";
@@ -267,7 +275,14 @@ services.unbound = {
       "1.0.0.1@853#cloudflare-dns.com"
     ];
   }];
-};   
+};
+#enable ssh via tailscale0
+services.openssh = {
+  enable = true;
+  openFirewall = false;  # ← blokkeert port 22 op alle interfaces
+};
+
+networking.firewall.interfaces."tailscale0".allowedTCPPorts = [ 22 ];      
 #flatpak
 services.flatpak.enable = true;
 
