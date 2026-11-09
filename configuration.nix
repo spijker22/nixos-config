@@ -211,9 +211,9 @@ environment.systemPackages = with pkgs; [
   libimobiledevice
   ifuse # Allows mounting the iOS file system via FUSE
   cmatrix
+  xonotic-glx
   handbrake
   libdvdcss
-  appimage-run
   android-tools
   supertuxkart
   tor-browser
