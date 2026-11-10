@@ -191,9 +191,10 @@ environment.systemPackages = with pkgs; [
   #gnomeExtensions.just-perfection
   #gnomeExtensions.arc-menu
   gnomeExtensions.dash-to-dock
-  #brave-origin
-  #librewolf
-  (brave-origin.override { commandLineArgs = [ "--incognito" ]; })   
+(chromium.override {
+    enableWideVine = true;
+    commandLineArgs = [ "--incognito" ];
+    })
   abcde
   flac
   cdparanoia
@@ -211,6 +212,7 @@ environment.systemPackages = with pkgs; [
   libimobiledevice
   ifuse # Allows mounting the iOS file system via FUSE
   cmatrix
+  #chromium
   xonotic-glx
   handbrake
   libdvdcss
@@ -249,7 +251,29 @@ programs.bash.shellInit = ''
     git commit -m "$msg" &&
     git push
   }
-'';   
+'';
+#test chrome extensie
+#test chrome extensie
+programs.chromium = {
+  enable = true;
+  homepageLocation = "https://www.startpage.com/";
+  extensions = [
+    "ddkjiahejlhfcafbddmgiahcphecmpfh;https://clients2.google.com/service/update2/crx" # uBlock Origin Lite
+    "edibdbjcniadpccecjdfdjjppcpchdlm;https://clients2.google.com/service/update2/crx" # I don't care about cookies
+    "aleakchihdccplidncghkekgioiakgal;https://clients2.google.com/service/update2/crx" # h264ify
+    "mnjggcdmjocbbbhaepdhchncahnbgone;https://clients2.google.com/service/update2/crx" # SponsorBlock
+  ];
+  extraOpts = {
+    "WebAppInstallForceList" = [
+      {
+        "custom_name" = "Youtube";
+        "create_desktop_shortcut" = false;
+        "default_launch_container" = "window";
+        "url" = "https://youtube.com";
+      }
+    ];
+  };
+};
 #cloudflare dns 
 #networking.nameservers = [ "1.1.1.1" "1.0.0.1" ];
 #networking.networkmanager.dns = "none";   
@@ -296,7 +320,7 @@ systemd.services.flatpak-management = {
       ${pkgs.flatpak}/bin/flatpak remote-add --if-not-exists flathub \
         https://flathub.org/repo/flathub.flatpakrepo
 
-      for app in com.google.Chrome org.mozilla.firefox; do
+      for app in org.mozilla.firefox; do
         ${pkgs.flatpak}/bin/flatpak install -y --noninteractive flathub "$app"
       done
 
