@@ -30,6 +30,17 @@ services.usbmuxd = {
         echo "iPhone veilig ontkoppeld! 👋"
     }
   '';
+
+#intel
+hardware.graphics = {
+  enable = true;
+  extraPackages = with pkgs; [
+    #intel-media-driver # Voor Intel 5e/6e generatie of nieuwer
+    intel-vaapi-driver # Voor oudere Intel-chips (4e generatie of ouder)
+    libvdpau-va-gl
+  ];
+};
+
 # Nvidia latest
   #hardware.graphics.enable = true;
   #services.xserver.videoDrivers = [ "nvidia" ];
@@ -212,7 +223,6 @@ environment.systemPackages = with pkgs; [
   libimobiledevice
   ifuse # Allows mounting the iOS file system via FUSE
   cmatrix
-  #chromium
   xonotic-glx
   handbrake
   libdvdcss
@@ -256,7 +266,8 @@ programs.bash.shellInit = ''
 #test chrome extensie
 programs.chromium = {
   enable = true;
-  homepageLocation = "https://www.startpage.com/";
+  homepageLocation = "https://www.duckduckgo.com/";
+
   extensions = [
     "ddkjiahejlhfcafbddmgiahcphecmpfh;https://clients2.google.com/service/update2/crx" # uBlock Origin Lite
     "edibdbjcniadpccecjdfdjjppcpchdlm;https://clients2.google.com/service/update2/crx" # I don't care about cookies
@@ -272,8 +283,60 @@ programs.chromium = {
         "url" = "https://youtube.com";
       }
     ];
+   # Prestaties & Geheugenbeheer
+    "HighEfficiencyModeEnabled" = true;
+    "SitePerProcess" = true;
+ # DuckDuckGo als standaardzoekmachine in de adresbalk
+    "DefaultSearchProviderEnabled" = true;
+    "DefaultSearchProviderName" = "DuckDuckGo";
+    "DefaultSearchProviderKeyword" = "ddg";
+    "DefaultSearchProviderSearchURL" = "https://duckduckgo.com?q={searchTerms}";
+    "DefaultSearchProviderSuggestURL" = ""; # Leeg gelaten zodat getypte tekst niet direct wordt meegestuurd
+
+    # Account, Sync & Wachtwoorden
+    "BrowserSignin" = 0;
+    "SyncDisabled" = true;
+    "PasswordManagerEnabled" = false;
+    "AutofillAddressEnabled" = false;
+    "AutofillCreditCardEnabled" = false;
+    "PaymentMethodQueryEnabled" = false;
+
+    # Cookies & Verbindingen
+    "BlockThirdPartyCookies" = true;
+    "DefaultCookiesSetting" = 1;
+    "HttpsOnlyMode" = "force_enabled";
+    "NetworkPredictionOptions" = 2;
+    "WebRtcIPHandling" = "disable_non_proxied_udp";
+
+    # Google AI, Telemetrie & Advertentie-tracking (Privacy Sandbox)
+    "GenAiDefaultSettings" = 2;
+    "MetricsReportingEnabled" = false;
+    "UrlKeyedAnonymizedDataCollectionEnabled" = false;
+    "SearchSuggestEnabled" = false;
+    "PrivacySandboxAdMeasurementEnabled" = false;
+    "PrivacySandboxAdTopicsEnabled" = false;
+    "PrivacySandboxSiteEnabledAdsEnabled" = false;
+
+    # Achtergrondgedrag & UI opschonen
+    "BackgroundModeEnabled" = false;
+    "MediaRecommendationsEnabled" = false;
+    "PromotionalTabsEnabled" = false;
+    "TranslateEnabled" = false;
+    "AlternateErrorPagesEnabled" = false;
+
+    # Standaard website- en hardwarerechten blokkeren
+    "DefaultGeolocationSetting" = 2;
+    "DefaultNotificationsSetting" = 2;
+    "DefaultSensorsSetting" = 2;
+    "DefaultSerialGuardSetting" = 2;
+    "DefaultHidGuardSetting" = 2;
   };
 };
+# Dwingt alle Chromium- en Electron-applicaties om native op Wayland te draaien
+environment.sessionVariables = {
+  NIXOS_OZONE_WL = "1";
+};
+
 #cloudflare dns 
 #networking.nameservers = [ "1.1.1.1" "1.0.0.1" ];
 #networking.networkmanager.dns = "none";   
