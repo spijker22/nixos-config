@@ -340,29 +340,44 @@ environment.sessionVariables = {
 #cloudflare dns 
 #networking.nameservers = [ "1.1.1.1" "1.0.0.1" ];
 #networking.networkmanager.dns = "none";   
-#unbound 
+#unbound
 services.unbound = {
-  enable = true;
-  settings.server = {
-    interface = [ "192.168.2.2" "127.0.0.1" ];
-    access-control = [ "192.168.2.0/24 allow" ];
-    module-config = "'respip validator iterator'";
+    enable = true;
+
+    settings.server = {
+      # Luister alleen lokaal op je eigen apparaat (werkt op elk netwerk)
+      interface = [ "127.0.0.1" "::1" ];
+      # Sta alleen verzoeken vanaf je eigen apparaat toe
+      access-control = [
+        "127.0.0.0/8 allow"
+        "::1/128 allow"
+      ];
+      module-config = "'respip validator iterator'";
+    };
+
+    settings.rpz = [{
+      name = "hageziPro";
+      url = "https://cdn.jsdelivr.net/gh/hagezi/dns-blocklists@latest/rpz/pro.txt";
+    }];
+
+    settings.forward-zone = [{
+      name = ".";
+      forward-tls-upstream = true;
+      forward-addr = [
+        "9.9.9.9@853#dns.quad9.net"
+        "149.112.112.112@853#dns.quad9.net"
+        "1.1.1.1@853#cloudflare-dns.com"
+        "1.0.0.1@853#cloudflare-dns.com"
+      ];
+    }];
   };
-  settings.rpz = [{
-    name = "hageziPro";
-    url = "https://cdn.jsdelivr.net/gh/hagezi/dns-blocklists@latest/rpz/pro.txt";
-  }];
-  settings.forward-zone = [{
-    name = ".";
-    forward-tls-upstream = true;
-    forward-addr = [
-      "9.9.9.9@853#dns.quad9.net"
-      "149.112.112.112@853#dns.quad9.net"
-      "1.1.1.1@853#cloudflare-dns.com"
-      "1.0.0.1@853#cloudflare-dns.com"
-    ];
-  }];
-};
+
+  # Zorg dat je systeem daadwerkelijk lokale Unbound gebruikt
+  networking.nameservers = [ "127.0.0.1" "::1" ];
+  # Voorkom dat DHCP (wifi-routers) je lokale DNS overschrijft (bij gebruik van NetworkManager)
+  networking.networkmanager.dns = "none";
+
+
 #enable ssh via tailscale0
 services.openssh = {
   enable = true;
